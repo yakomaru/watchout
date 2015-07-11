@@ -4,11 +4,22 @@
     <link rel='stylesheet' type='css' href='styles.css'> 
   </head>
   <body>
+
     <div class="scoreboard">
       <!-- Modify the scoreboard when important events occur in your game! -->
-      <div class="high">High score: <span>0</span></div>
-      <div class="current">Current score: <span>0</span></div>
-      <div class="collisions">Collisions: <span>0</span></div>
+<!--       <svg height=500 width=500>
+      <defs>
+        <pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
+        <image xlink:href="shuriken.png" x="0" y="0" width="20" height="20" />
+        </pattern>
+      </defs>
+      </svg> -->
+
+
+
+      <div>High score: <span class="high">0</span></div>
+      <div>Current score: <span class="score">0</span></div>
+      <div>Collisions: <span class="collisions">0</span></div>
     </div>
     <script src="d3.js" charset="utf-8"></script>
     <script src='watchout.js'></script>
