@@ -13,18 +13,18 @@ var drag = d3.behavior.drag()
   })
   .on("drag", function(){
     d3.select(this).attr("cx", function() {
-      if(d3.event.x < 10) {
-        return 10;
-      } else if(d3.event.x > 490) {
-        return 490;
+      if(d3.event.x < 15) {
+        return 15;
+      } else if(d3.event.x > width - 15) {
+        return width - 15;
       } else {
         return d3.event.x
       }
     }).attr("cy", function() {
-      if(d3.event.y < 10) {
-        return 10;
-      } else if(d3.event.y > 490) {
-        return 490;
+      if(d3.event.y < 15) {
+        return 15;
+      } else if(d3.event.y > height - 15) {
+        return height - 15;
       } else {
         return d3.event.y;
       }
@@ -37,15 +37,15 @@ var drag = d3.behavior.drag()
 
 var initialize = function(){
   //add svg
-  d3.select("body").append("svg").attr("height", "500").attr("width", "500")
+  d3.select("body").append("svg").attr("height", height).attr("width", width)
     .append("defs")
     .append("pattern")
     .attr("id", "bg")
-    .attr("height", 20)
-    .attr("width", 20)
+    .attr("height", 30)
+    .attr("width", 30)
     .append("image")
-    .attr("xlink:href", "shuriken.png").attr('width', 20).attr('height', 20);
-  d3.select('svg').append('rect').attr('height', 500).attr('width', 500).attr('fill', 'red').style('display', 'none');
+    .attr("xlink:href", "shuriken2.png").attr('width', 30).attr('height', 30);
+  d3.select('svg').append('rect').attr('height', height).attr('width', width).attr('fill', 'red').style('display', 'none');
 
 };
 
@@ -53,8 +53,8 @@ var initialize = function(){
 
 var insertPlayers = function(){
   for (var i = 0; i < 10; i++){
-    d3.select("svg").append("circle").attr("class", "enemy").attr("cx", Math.random() * 500)
-      .attr("cy", Math.random() * 500).attr("r", 10).attr('fill', 'url(#bg)');
+    enemies[i] = d3.select("svg").append("circle").attr("class", "enemy").attr("cx", Math.random() * width)
+      .attr("cy", Math.random() * height).attr("r", 15).attr('fill', 'url(#bg)');
       /*.append('defs')
       .append('pattern').attr('id', 'img1').attr('patternUnits', 'userSpaceOnUse')
         .attr('width', 20).attr('height', 20)
@@ -67,21 +67,23 @@ var insertPlayers = function(){
       // </defs>
 
   }
-  var hero = d3.select("svg").append("circle").attr("class", "hero").attr("cx", 250)
-    .attr("cy", 250).attr("r", 10).attr("fill", "blue").call(drag);
+  var hero = d3.select("svg").append("circle").attr("class", "hero").attr("cx", width / 2)
+    .attr("cy", height / 2).attr("r", 15).attr("fill", "blue").call(drag);
 };
 
 var updateEnemies = function(){
-  d3.select("svg").selectAll(".enemy").transition().duration(1000).attr("cx", function(){return Math.random() * 500})
-    .attr("cy", function(){return Math.random() * 500});
+  d3.select("svg").selectAll(".enemy").transition().duration(1500).attr("cx", function(){return Math.random() * width})
+    .attr("cy", function(){return Math.random() * height});
 }
 
 var collisionCheck = function(){
-  var enemy = d3.selectAll('.enemy')[0];
-  var hero = d3.selectAll('.hero')[0][0];
+  // var enemy = d3.selectAll('.enemy')[0];
+  // var hero = d3.selectAll('.hero')[0][0];
+  rotate = (rotate + 4) % 360;
   for (var i = 0; i < 10; i++){
-    if (Math.abs(enemy[i].cx.animVal.value - hero.cx.animVal.value) <= 20 &&
-        Math.abs(enemy[i].cy.animVal.value - hero.cy.animVal.value) <= 20 ){
+    enemies[i].attr('transform', function() {return 'rotate(' + rotate + ' ' + enemies[i].attr('cx') + ' ' + enemies[i].attr('cy') + ')'})
+    if (Math.abs(enemy[i].cx.animVal.value - hero.cx.animVal.value) <= 30 &&
+        Math.abs(enemy[i].cy.animVal.value - hero.cy.animVal.value) <= 30 ){
       if(currentScore > highScore) {
         highScore = currentScore;
         d3.select('.high').text(highScore);
@@ -100,15 +102,21 @@ var score = function(){
 }
 
 
+var height = screen.height * 0.7;
+var width = screen.width * 0.9;
 
-var enemies = [];d3.selectAll(".enemy");
+
+var enemies = [];
 var currentScore = 0;
 var highScore = 0;
 var collisions = 0;
+var rotate = 0;
 
 
 initialize();
 insertPlayers();
-setInterval(updateEnemies, 1000);
-setInterval(collisionCheck, 1);
+setInterval(updateEnemies, 1500);
+setInterval(collisionCheck, 10);
 setInterval(score, 100);
+var enemy = d3.selectAll('.enemy')[0];
+var hero = d3.selectAll('.hero')[0][0];
