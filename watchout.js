@@ -79,7 +79,7 @@ var updateEnemies = function(){
 var collisionCheck = function(){
   // var enemy = d3.selectAll('.enemy')[0];
   // var hero = d3.selectAll('.hero')[0][0];
-  rotate = (rotate + 4) % 360;
+  rotate = (rotate + 6) % 360;
   for (var i = 0; i < 10; i++){
     enemies[i].attr('transform', function() {return 'rotate(' + rotate + ' ' + enemies[i].attr('cx') + ' ' + enemies[i].attr('cy') + ')'})
     if (Math.abs(enemy[i].cx.animVal.value - hero.cx.animVal.value) <= 30 &&
@@ -116,7 +116,7 @@ var rotate = 0;
 initialize();
 insertPlayers();
 setInterval(updateEnemies, 1500);
-setInterval(collisionCheck, 10);
+setInterval(collisionCheck, 20);
 setInterval(score, 100);
 var enemy = d3.selectAll('.enemy')[0];
 var hero = d3.selectAll('.hero')[0][0];
